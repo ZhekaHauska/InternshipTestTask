@@ -1,7 +1,20 @@
 import numpy as np
+import keras.backend as K
+import keras.metrics
 
 
 EPS = 1e-10
+
+
+def dice_score(true, pred):
+    """Dice score adopted to Keras API
+
+    """
+    pred = K.round(pred)
+    intersection = K.sum(true * pred)
+    im_sum = K.sum(true) + K.sum(pred)
+
+    return 2.0 * intersection / (im_sum + EPS)
 
 
 def dice(true, pred):
@@ -27,6 +40,7 @@ def dice(true, pred):
     object, could be different from 1 (for example 255).
 
     """
+
     true = true.astype(bool)
     pred = pred.astype(bool)
 
